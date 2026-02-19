@@ -317,6 +317,28 @@ const App: React.FC = () => {
                 </div>
               </div>
 
+              {/* API Key / Pro Mode CTA */}
+              {!hasCustomKey && (
+                <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <h4 className="font-bold text-blue-400 uppercase text-xs flex items-center gap-2">
+                      <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+                      Unlock Unlimited Generations
+                    </h4>
+                    <p className="text-[10px] text-zinc-400 mt-1">
+                      Connect your own Gemini API Key to bypass free limits and access 2K Ultra mode. 
+                      <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="text-blue-400 underline ml-1">Learn about paid keys.</a>
+                    </p>
+                  </div>
+                  <button 
+                    onClick={handleSelectKey}
+                    className="bg-blue-500 hover:bg-blue-400 text-white text-[10px] font-bold py-2 px-4 rounded-xl transition-all shadow-[0_4px_0_0_#1e40af] active:shadow-none active:translate-y-[4px] uppercase whitespace-nowrap"
+                  >
+                    Connect API Key
+                  </button>
+                </div>
+              )}
+
               {/* Ultra Toggle */}
               <div className="flex items-center justify-between p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800">
                 <div>
@@ -332,16 +354,16 @@ const App: React.FC = () => {
               </div>
 
               <button
-                onClick={handleGenerate}
-                disabled={isGenerating || !prompt.trim() || (!hasCustomKey && energy <= 0)}
+                onClick={hasCustomKey || energy > 0 ? handleGenerate : handleSelectKey}
+                disabled={isGenerating || !prompt.trim()}
                 className={`w-full font-bangers text-2xl py-5 rounded-2xl shadow-[0_6px_0_0_#15803d] active:shadow-none active:translate-y-[6px] transition-all ${
                   !hasCustomKey && energy <= 0 
-                  ? 'bg-zinc-800 text-zinc-600 shadow-zinc-900 cursor-not-allowed' 
+                  ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-800' 
                   : 'bg-green-500 hover:bg-green-400 text-black'
                 }`}
               >
                 {!hasCustomKey && energy <= 0 
-                  ? "ENERGY DEPLETED - PRESS REFILL" 
+                  ? "CONNECT API KEY FOR UNLIMITED ART" 
                   : isGenerating ? "RENDERING..." : `GENERATE ${isUltra ? "ULTRA" : "FREE"} ART`
                 }
               </button>
